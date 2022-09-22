@@ -1,10 +1,20 @@
+mod hooks;
+mod types;
+use hooks::use_auth::use_auth;
+use types::user::User;
 use yew::{function_component, html};
 
 #[function_component(App)]
 fn app() -> Html {
+    let user = use_auth();
+
     html! {
         <main>
-            <h1>{"Hello world"}</h1>
+            if User::is_authenticated(&user) {
+                <h1>{user.unwrap().name}{" is signed in"}</h1>
+            } else {
+                <h1>{"User is not signed in"}</h1>
+            }
         </main>
     }
 }
