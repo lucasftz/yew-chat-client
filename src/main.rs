@@ -1,7 +1,6 @@
-mod hooks;
-mod types;
-use hooks::use_auth::use_auth;
-use types::user::User;
+mod modules;
+use modules::hooks::use_auth::use_auth;
+use modules::types::user::User;
 use yew::{function_component, html};
 
 #[function_component(App)]
