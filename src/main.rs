@@ -1,4 +1,5 @@
 mod modules;
+use modules::components::login::Login;
 use modules::hooks::use_auth::use_auth;
 use modules::types::user::User;
 use yew::{function_component, html};
@@ -12,7 +13,7 @@ fn app() -> Html {
             if User::is_authenticated(&user) {
                 <h1>{user.unwrap().name}{" is signed in"}</h1>
             } else {
-                <h1>{"User is not signed in"}</h1>
+                <Login />
             }
         </main>
     }
