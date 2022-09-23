@@ -5,5 +5,5 @@ pub fn use_auth() -> Option<User> {
     // hardcoded value for now
     let user = User::new("Carolina De La Cuba");
 
-    Some(user)
+    None
 }
