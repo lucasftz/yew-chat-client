@@ -1,6 +1,6 @@
-mod modules;
+mod components;
+use components::login::Login;
 use gloo::console::log;
-use modules::components::login::Login;
 use yew::{function_component, html, Callback};
 
 #[function_component(App)]
