@@ -11,9 +11,11 @@ pub struct Props {
 #[function_component(Login)]
 pub fn login(props: &Props) -> Html {
     let handler = props.handler.clone();
+    // state
     let is_error = use_state(|| false);
-    let is_error_shadow = is_error.clone();
     let text: UseStateHandle<Option<String>> = use_state(|| None);
+    // shadows
+    let is_error_shadow = is_error.clone();
     let text_shadow = text.clone();
 
     let submit = Callback::from(move |e: onsubmit::Event| {
