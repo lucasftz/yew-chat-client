@@ -1,7 +1,7 @@
 use crate::html::{onchange, onsubmit};
 use wasm_bindgen::JsCast;
 use web_sys::HtmlInputElement;
-use yew::{function_component, html, use_state, Callback, Properties};
+use yew::{function_component, html, use_state, Callback, Properties, UseStateHandle};
 
 #[derive(Properties, PartialEq)]
 pub struct Props {
@@ -11,12 +11,15 @@ pub struct Props {
 #[function_component(Login)]
 pub fn login(props: &Props) -> Html {
     let handler = props.handler.clone();
-    let text = use_state(|| String::default());
+    let text: UseStateHandle<Option<String>> = use_state(|| None);
     let text_shadow = text.clone();
 
     let submit = Callback::from(move |e: onsubmit::Event| {
         e.prevent_default();
-        handler.emit(text_shadow.to_string());
+        match &*text_shadow {
+            Some(value) => handler.emit(value.to_owned()),
+            None => todo!(),
+        }
     });
 
     let change = Callback::from(move |e: onchange::Event| {
@@ -25,7 +28,7 @@ pub fn login(props: &Props) -> Html {
             .unwrap()
             .unchecked_into::<HtmlInputElement>()
             .value();
-        text.set(value);
+        text.set(Some(value));
     });
 
     html! {
