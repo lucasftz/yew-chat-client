@@ -1,3 +1,4 @@
+use crate::components::form::Form;
 use crate::User;
 use yew::{function_component, html, use_context, Callback};
 
@@ -7,15 +8,13 @@ pub fn chatroom() -> Html {
     let user_shadow = user.clone();
 
     let logout = Callback::from(move |_| user.log_out());
+    let onsubmit = Callback::from(|_| ());
 
     html! {
         <>
             <p>{"Username: "}{user_shadow.nick()}</p>
             <button onclick={logout}>{"Log out"}</button>
-            <form>
-                <input type="text" />
-                <input type="submit" value="Send" />
-            </form>
+            <Form handle_submit={onsubmit} error_msg={"".to_string()} />
         </>
     }
 }
