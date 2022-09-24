@@ -1,3 +1,4 @@
+use crate::components::chatroom::ChatRoom;
 use crate::components::login::Login;
 use crate::User;
 use yew::{function_component, html, use_context, Callback};
@@ -12,7 +13,7 @@ pub fn app() -> Html {
     html! {
         <main>
             if user_shadow.logged_in() {
-                <h1>{user_shadow.nick()}{" is logged in"}</h1>
+                <ChatRoom />
             } else {
                 <Login handler={handle_login} />
             }

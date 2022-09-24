@@ -15,6 +15,11 @@ impl User {
         self.logged_in.set(true);
     }
 
+    fn log_out(&self) {
+        self.nick.set(String::default());
+        self.logged_in.set(false);
+    }
+
     fn nick(&self) -> String {
         self.nick.to_string()
     }
