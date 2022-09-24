@@ -4,8 +4,10 @@ use yew::{function_component, html, use_state, Callback};
 
 #[function_component(App)]
 fn app() -> Html {
+    // state
     let nickname = use_state(|| String::default());
     let is_logged_in = use_state(|| false);
+    // handlers
     let nickname_handler = nickname.clone();
     let is_logged_in_handler = is_logged_in.clone();
 
