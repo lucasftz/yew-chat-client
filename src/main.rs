@@ -1,19 +1,22 @@
 mod modules;
+use gloo::console::log;
 use modules::components::login::Login;
-use modules::hooks::use_auth::use_auth;
-use modules::types::user::User;
-use yew::{function_component, html};
+use yew::{function_component, html, Callback};
 
 #[function_component(App)]
 fn app() -> Html {
-    let user = use_auth();
+    let is_logged_in = false; // hard coded for now
+
+    let handle_login = Callback::from(|input| {
+        log!(input);
+    });
 
     html! {
-        <main>
-            if User::is_authenticated(&user) {
-                <h1>{user.unwrap().name}{" is signed in"}</h1>
+            <main>
+            if is_logged_in {
+                <h1>{"User is signed in"}</h1>
             } else {
-                <Login />
+                <Login handler={handle_login} />
             }
         </main>
     }
