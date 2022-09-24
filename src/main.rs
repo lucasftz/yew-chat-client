@@ -19,7 +19,7 @@ fn app() -> Html {
     html! {
             <main>
             if *is_logged_in_handler {
-                <h1>{&*nickname_handler}{" is signed in"}</h1>
+                <h1>{&*nickname_handler}{" is logged in"}</h1>
             } else {
                 <Login handler={handle_login} />
             }
