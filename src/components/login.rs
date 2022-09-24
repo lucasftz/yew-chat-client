@@ -1,7 +1,7 @@
 use crate::html::{onchange, onsubmit};
 use wasm_bindgen::JsCast;
 use web_sys::HtmlInputElement;
-use yew::{function_component, html, use_state, Callback, Properties};
+use yew::{function_component, html, use_state, Callback, Properties, UseStateHandle};
 
 #[derive(Properties, PartialEq)]
 pub struct Props {
@@ -10,20 +10,17 @@ pub struct Props {
 
 #[function_component(Login)]
 pub fn login(props: &Props) -> Html {
-    // state
-    let nickname = use_state(|| String::default());
-    let is_error = use_state(|| false);
-    // handlers
-    let nickname_handler = nickname.clone();
-    let is_error_handler = is_error.clone();
     let handler = props.handler.clone();
+    let is_error = use_state(|| false);
+    let is_error_shadow = is_error.clone();
+    let text: UseStateHandle<Option<String>> = use_state(|| None);
+    let text_shadow = text.clone();
 
     let submit = Callback::from(move |e: onsubmit::Event| {
         e.prevent_default();
-        if nickname.is_empty() {
-            is_error.set(true);
-        } else {
-            handler.emit(nickname.to_string());
+        match &*text_shadow {
+            Some(value) => handler.emit(value.to_owned()),
+            None => is_error.set(true),
         }
     });
 
@@ -33,14 +30,14 @@ pub fn login(props: &Props) -> Html {
             .unwrap()
             .unchecked_into::<HtmlInputElement>()
             .value();
-        nickname_handler.set(value);
+        text.set(Some(value));
     });
 
     html! {
         <form onsubmit={submit}>
             <label>{"Nickname:"}</label>
             <input type="text" onchange={change} /><br />
-            if *is_error_handler {
+            if *is_error_shadow {
                 <p>{"Please enter a valid nickname"}</p>
             }
             <input type="submit" value="Log in" />

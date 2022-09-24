@@ -1,32 +1,43 @@
+mod app;
 mod components;
-use components::login::Login;
-use yew::{function_component, html, use_state, Callback};
+use crate::app::App;
+use yew::{function_component, html, use_state, ContextProvider, UseStateHandle};
 
-#[function_component(App)]
-fn app() -> Html {
-    // state
-    let nickname = use_state(|| String::default());
-    let is_logged_in = use_state(|| false);
-    // handlers
-    let nickname_handler = nickname.clone();
-    let is_logged_in_handler = is_logged_in.clone();
+#[derive(Clone, Debug, PartialEq)]
+pub struct User {
+    nick: UseStateHandle<String>,
+    logged_in: UseStateHandle<bool>,
+}
 
-    let handle_login = Callback::from(move |input| {
-        nickname.set(input);
-        is_logged_in.set(true);
-    });
+impl User {
+    fn log_in(&self, nick: String) {
+        self.nick.set(nick);
+        self.logged_in.set(true);
+    }
+
+    fn nick(&self) -> String {
+        self.nick.to_string()
+    }
+
+    fn logged_in(&self) -> bool {
+        *self.logged_in
+    }
+}
+
+#[function_component(UniversalProvider)]
+fn universal_provider() -> Html {
+    let ctx = User {
+        nick: use_state(|| String::default()),
+        logged_in: use_state(|| false),
+    };
 
     html! {
-            <main>
-            if *is_logged_in_handler {
-                <h1>{&*nickname_handler}{" is logged in"}</h1>
-            } else {
-                <Login handler={handle_login} />
-            }
-        </main>
+        <ContextProvider<User> context={ctx}>
+            <App />
+        </ContextProvider<User>>
     }
 }
 
 fn main() {
-    yew::start_app::<App>();
+    yew::start_app::<UniversalProvider>();
 }
