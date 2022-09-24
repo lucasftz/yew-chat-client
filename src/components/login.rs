@@ -11,6 +11,8 @@ pub struct Props {
 #[function_component(Login)]
 pub fn login(props: &Props) -> Html {
     let handler = props.handler.clone();
+    let is_error = use_state(|| false);
+    let is_error_shadow = is_error.clone();
     let text: UseStateHandle<Option<String>> = use_state(|| None);
     let text_shadow = text.clone();
 
@@ -18,7 +20,7 @@ pub fn login(props: &Props) -> Html {
         e.prevent_default();
         match &*text_shadow {
             Some(value) => handler.emit(value.to_owned()),
-            None => todo!(),
+            None => is_error.set(true),
         }
     });
 
@@ -35,6 +37,9 @@ pub fn login(props: &Props) -> Html {
         <form onsubmit={submit}>
             <label>{"Nickname:"}</label>
             <input type="text" onchange={change} /><br />
+            if *is_error_shadow {
+                <p>{"Please enter a valid nickname"}</p>
+            }
             <input type="submit" value="Log in" />
         </form>
     }
