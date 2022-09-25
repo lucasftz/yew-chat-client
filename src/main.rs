@@ -2,17 +2,20 @@ mod app;
 mod components;
 mod context;
 use crate::app::App;
-use context::user::User;
+use context::{socket::Socket, user::User};
 use yew::{function_component, html, ContextProvider};
 
 #[function_component(UniversalProvider)]
 fn universal_provider() -> Html {
-    let ctx = User::new();
+    let user_ctx = User::new();
+    let ws_ctx = Socket::new();
 
     html! {
-        <ContextProvider<User> context={ctx}>
-            <App />
-        </ContextProvider<User>>
+        <ContextProvider<Socket> context={ws_ctx}>
+            <ContextProvider<User> context={user_ctx}>
+                <App />
+            </ContextProvider<User>>
+        </ContextProvider<Socket>>
     }
 }
 
