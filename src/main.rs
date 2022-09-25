@@ -1,40 +1,13 @@
 mod app;
 mod components;
+mod context;
 use crate::app::App;
-use yew::{function_component, html, use_state, ContextProvider, UseStateHandle};
-
-#[derive(Clone, Debug, PartialEq)]
-pub struct User {
-    nick: UseStateHandle<String>,
-    logged_in: UseStateHandle<bool>,
-}
-
-impl User {
-    fn log_in(&self, nick: String) {
-        self.nick.set(nick);
-        self.logged_in.set(true);
-    }
-
-    fn log_out(&self) {
-        self.nick.set(String::default());
-        self.logged_in.set(false);
-    }
-
-    fn nick(&self) -> String {
-        self.nick.to_string()
-    }
-
-    fn logged_in(&self) -> bool {
-        *self.logged_in
-    }
-}
+use context::user::User;
+use yew::{function_component, html, ContextProvider};
 
 #[function_component(UniversalProvider)]
 fn universal_provider() -> Html {
-    let ctx = User {
-        nick: use_state(|| String::default()),
-        logged_in: use_state(|| false),
-    };
+    let ctx = User::new();
 
     html! {
         <ContextProvider<User> context={ctx}>

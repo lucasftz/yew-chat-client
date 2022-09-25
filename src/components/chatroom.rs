@@ -1,5 +1,5 @@
 use crate::components::form::Form;
-use crate::User;
+use crate::context::user::User;
 use yew::{function_component, html, use_context, Callback};
 
 #[function_component(ChatRoom)]
